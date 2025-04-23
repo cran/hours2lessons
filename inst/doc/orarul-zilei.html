@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Orarul școlar al unei zile</title>
+<style type="text/css">
+/**
+ * Prism.s theme ported from highlight.js's xcode style
+ */
+pre code {
+  padding: 1em;
+}
+.token.comment {
+  color: #007400;
+}
+.token.punctuation {
+  color: #999;
+}
+.token.tag,
+.token.selector {
+  color: #aa0d91;
+}
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol {
+  color: #1c00cf;
+}
+.token.property,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin {
+  color: #c41a16;
+}
+.token.inserted {
+  background-color: #ccffd8;
+}
+.token.deleted {
+  background-color: #ffebe9;
+}
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: #9a6e3a;
+}
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: #836c28;
+}
+.token.function,
+.token.class-name {
+  color: #DD4A68;
+}
+.token.regex,
+.token.important,
+.token.variable {
+  color: #5c2699;
+}
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+.token.italic {
+  font-style: italic;
+}
+</style>
+<style type="text/css">
+body {
+  font-family: sans-serif;
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+body, .footnotes, code { font-size: .9em; }
+li li { font-size: .95em; }
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+pre, img { max-width: 100%; }
+pre, pre:hover {
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+pre code {
+  display: block;
+  overflow-x: auto;
+}
+code { font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace; }
+:not(pre) > code, code[class] { background-color: #F8F8F8; }
+code.language-undefined, pre > code:not([class]) {
+  background-color: inherit;
+  border: 1px solid #eee;
+}
+table {
+  margin: auto;
+  border-top: 1px solid #666;
+}
+table thead th { border-bottom: 1px solid #ddd; }
+th, td { padding: 5px; }
+thead, tfoot, tr:nth-child(even) { background: #eee; }
+blockquote {
+  color: #666;
+  margin: 0;
+  padding-left: 1em;
+  border-left: 0.5em solid #eee;
+}
+hr, .footnotes::before { border: 1px dashed #ddd; }
+.frontmatter { text-align: center; }
+#TOC .numbered li { list-style: none; }
+#TOC .numbered { padding-left: 0; }
+#TOC .numbered ul { padding-left: 1em; }
+table, .body h2 { border-bottom: 1px solid #666; }
+.body .appendix, .appendix ~ h2 { border-bottom-style: dashed; }
+.footnote-ref a::before { content: "["; }
+.footnote-ref a::after { content: "]"; }
+section.footnotes::before {
+  content: "";
+  display: block;
+  max-width: 20em;
+}
+
+@media print {
+  body {
+    font-size: 12pt;
+    max-width: 100%;
+  }
+  tr, img { page-break-inside: avoid; }
+}
+@media only screen and (min-width: 992px) {
+  pre { white-space: pre; }
+}
+</style>
+</head>
+<body>
+<div class="frontmatter">
+<div class="title"><h1>Orarul școlar al unei zile</h1></div>
+<div class="author"><h2>Vlad Bazon</h2></div>
+<div class="date"><h3>2025-04-19</h3></div>
+</div>
+<div class="body">
+<pre><code class="language-r">library(hours2lessons)
+</code></pre>
+<h2 id="contextul-de-lucru">Contextul de lucru</h2>
+<p>Asumăm existența unui set de date (<em>data.frame</em>) cu câte o linie pentru fiecare dintre lecțiile <strong><code>prof|cls</code></strong> ale unei zile de lucru, cu următoarele proprietăți principale (caracteristice unui <em>orar școlar</em>): fiecare profesor apare de cel mult 7 ori (și la o aceeași clasă, de cel mult două ori); fiecare clasă apare de cel puțin 4 ori și cel mult 7 ori (altfel spus, profesorii au câte cel mult 7 ore/zi; clasele au între 4 și 7 ore/zi). Ca <em>exemplu</em> este furnizat setul de lecții <strong>LSS</strong>.</p>
+<p>În coloana <strong><code>prof</code></strong> avem <em>coduri</em> (în loc de “numele profesorilor”) de lungime 3 sau 6, semnificând <em>disciplina</em> principală a profesorului (abreviată pe două litere) și un număr de ordine între cei (cel mult 9) încadrați  pe o aceeași disciplină principală; un cod de lungime 6, dacă există, reprezintă un <em>cuplaj</em> (sau “profesor <em>fictiv</em>”), alipind două coduri de lungime 3: cei doi profesori au de făcut lecția respectivă (într-o aceeași oră) cu câte o grupă de elevi ai clasei <code>cls</code>.</p>
+<pre><code class="language-r">str(LSS)  # un exemplu de set de lecții
+#&gt; tibble [204 × 2] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ prof: chr [1:204] &quot;Mt1&quot; &quot;Is3&quot; &quot;Ro9&quot; &quot;En4&quot; ...
+#&gt;  $ cls : chr [1:204] &quot;05A&quot; &quot;05A&quot; &quot;05A&quot; &quot;05A&quot; ...
+</code></pre>
+<pre><code class="language-r">LSS %&gt;% dplyr::filter(nchar(prof)==6)  # listează cuplajele existente
+#&gt; # A tibble: 2 × 2
+#&gt;   prof   cls  
+#&gt;   &lt;chr&gt;  &lt;chr&gt;
+#&gt; 1 Ds1Mz1 12E  
+#&gt; 2 Fr1Gr1 12D
+</code></pre>
+<p>Admitem și existența unor <em>tuplaje</em>, într-un set suplimentar de date: profesorii din acest set au de intrat în câte o aceeași oră a zilei, la câte o grupă constituită din elevi de la două, trei sau chiar patru clase (sau eventual, la câte una dintre clasele respective); formal, un tuplaj este reprezentat inițial înscriind în <code>prof</code> vectorul profesorilor și în <code>cls</code> vectorul claselor “tuplate” acestora. Ca <em>exemplu</em> este furnizat setul de lecții tuplate <strong>Tuplaje</strong>.</p>
+<pre><code class="language-r">Tuplaje
+#&gt;              prof         cls
+#&gt; 1         Ds1 Mz1     10E 11E
+#&gt; 2     Fr2 Fr3 Gr1 09A 09C 09D
+#&gt; 3 Fr1 Fr2 Fr3 Gr2 10B 10C 10E
+#&gt; 4     Fr1 Fr2 Gr1     11C 11E
+</code></pre>
+<p>De observat că dacă numărul de profesori este (cu <code>1</code>) mai mare ca al claselor, atunci… avem de înființat <em>noi</em> cuplaje (de exemplu, <code>Fr1Fr2</code> la clasele <code>10B</code> și <code>11C</code>, corespunzător tuplajelor din liniile 3 și 4).</p>
+<p><strong>Sarcina pachetului:</strong> avem de adăugat pe setul <em>tuturor</em> lecțiilor o coloană <strong><code>ora</code></strong>, astfel încât profesorii (inclusiv cei fictivi) să nu-și suprapună lecțiile (în câte o aceeași oră) și pe de altă parte, profesorii implicați într-un tuplaj să intre într-o aceeași oră, la clasele din tuplajul respectiv (fără suprapunere cu lecțiile vreunui alt tuplaj și nici cu lecțiile proprii ale membrilor tuplajului respectiv).</p>
+<h2 id="algoritmul-de-alocare-pe-ore-a-lec-iilor">Algoritmul de alocare pe ore a lecțiilor</h2>
+<p><em>Parafrazăm</em> aici, algoritmul folosit în funcția <strong><code>mount_hours</code></strong><code>()</code> pentru a constitui <em>un orar</em> al lecțiilor.</p>
+<p>Mai întâi, se investighează setul de tuplaje (dacă există) și dacă este cazul se înființează <em>noi</em> cuplaje (egalând în fiecare tuplaj numărul de clase cu cel de profesori); se completează setul principal de lecții (care conține lecțiile profesorilor și cuplajelor inițiale, din afara tuplajelor) cu lecțiile din setul suplimentar al celor tuplate (dacă există un profesor care <em>cumulează</em> mai mult de 7 ore, atunci… STOP).</p>
+<p>Se împart lecțiile după clasă (constituind o <em>listă</em> care asociază fiecărei clase, setul lecțiilor acesteia).</p>
+<p>Se parcurge lista claselor, într-o ordine <em>aleatorie</em> dar ponderată de coeficienții <em>betweenness</em> (în ordine <em>crescătoare</em>) rezultați printr-o funcție internă (în care utilizăm două funcții din pachetul <strong><code>igraph</code></strong>) pe graful claselor după numărul de profesori <em>comuni</em> la câte două clase.</p>
+<p>Se înființeză un <em>vector</em> care asociază fiecărui profesor câte un octet (inițializat cu <code>0L</code>) în care urmează să se înregistreze alocările făcute până la momentul curent, lecțiilor profesorului respectiv (un bit <code>1</code> în poziția <code>i=0:6</code> arată că i s-a alocat deja ora <code>(i+1)</code>).</p>
+<p>Se etichetează lecțiile clasei <em>curente</em> cu o permutare de ore (după numărul de ore/zi ale clasei); dacă astfel, la vreunul dintre profesorii clasei, se constată o suprapunere cu vreo lecție alocată <em>anterior</em> (la o clasă întâlnită înaintea celei curente), atunci se încearcă o altă permutare de ore (pentru lecțiile clasei curente). Dacă pentru niciuna dintre permutările încercate, <em>nu</em> se poate evita conflictul cu alocările anterioare, atunci… se <em>abandonează</em> parcurgerea mai departe a listei claselor, se <em>reinițializează</em> vectorul octeților de alocare asociați profesorilor și se <em>reia</em> parcurgerea listei claselor, dar într-o altă ordine (aleatoriu, cu “preferințe” date de coeficienții asociați claselor).</p>
+<p>Dacă pentru clasa curentă se nimerește o etichetare cu ore convenabilă (fără suprapuneri cu octeții de alocare ai profesorilor clasei, constituiți până la momentul curent), atunci se înregistrează pe biți (în octeții de alocare ai profesorilor clasei) alocarea respectivă și se trece la următoarea clasă.</p>
+<p>Corelațiile induse de normele de încadrare a profesorilor (care limitează numărul de ore pe profesor și pe clasă) asigură că la un moment dat (după un număr mai mare sau mai mic de reluări) se va nimeri totuși o ordine de parcurgere a claselor prin care lecțiile <em>fiecărei</em> clase sunt etichetate cu ore, fără conflicte; reunind în final orarele claselor, rezultă orarul <strong><code>prof|cls|ora</code></strong> (în <em>format lung</em>) pe ziua respectivă.</p>
+<p>Fiind implicate elemente aleatorii, la fiecare nouă execuție a funcției <code>mount_hours()</code> se va obține de regulă câte un alt orar. Subliniem că <em>nu</em> se are în vedere, numărul de <em>ferestre</em> rezultate pe orarele individuale ale profesorilor (fiind sarcina unui alt pachet, să ajusteze orarul încât numărul total de ferestre să fie cât se poate de mic).</p>
+<p>Funcția <strong><code>long2matrix</code></strong><code>()</code> transformă orarul din “formatul lung” într-o matrice în care fiecare linie indică pentru câte un profesor, clasele la care va intra acesta în fiecare oră (iar “<code>-</code>” marchează o fereastră sau o oră liberă, din afara orarului individual respectiv).</p>
+<p>De <em>exemplu</em>, pentru seturile <strong><code>LSS</code></strong> și <strong><code>Tuplaje</code></strong> găsim orarul profesorilor angajați în cuplaje sau în tuplaje (cu sublinierea că la o nouă execuție, vom obține un <em>alt</em> orar, poate în mai puține încercări, poate mai bun sau poate, mai rău):</p>
+<pre><code class="language-r">mount_hours(LSS, Tuplaje) %&gt;% as.data.frame() %&gt;%
+    dplyr::filter(grepl(&quot;Fr|Gr|Ds|Mz&quot;, .$prof)) %&gt;% 
+    long2matrix() %&gt;% as.data.frame()
+#&gt;          1   2   3   4   5   6   7
+#&gt; Ds1Mz1   -   - 12E   -   -   -   -
+#&gt; Fr1Gr1   -   -   - 12D   -   -   -
+#&gt; Gr2      - 10E   -   - 05A   -   -
+#&gt; Fr1Fr2   - 10B 11C   -   -   -   -
+#&gt; Fr3      - 10C   -   - 09C   -   -
+#&gt; Gr1    11E 07C 11E   - 09D   -   -
+#&gt; Fr1    06C   -   -   - 10B   -   -
+#&gt; Ds1    07A 06B   - 09E   - 10E   -
+#&gt; Fr2      -   -   -   - 09A 10C 11C
+#&gt; Mz1    05C   -   - 07D 08B 11E   -
+</code></pre>
+<p>În ora în care profesorul fictiv <code>Ds1Mz1</code> intră la clasa <code>12E</code>, profesorii <code>Ds1</code> și <code>Mz1</code> nu au ore proprii (încât pot intra împreună, pe grupe, la <code>12E</code>); observăm la fel, pentru cuplajul <code>Fr1Gr1</code>.<br />
+Profesorii <code>Fr1</code>, <code>Fr2</code> și <code>Gr1</code> formau un tuplaj pe clasele <code>11C</code> și <code>11E</code> și observăm că s-a înființat profesorul fictiv <code>Fr1Fr2</code> care intră la <code>11C</code> într-o aceeași oră în care <code>Gr1</code> intră la <code>11E</code> (oră în care <code>Fr1</code> și <code>Fr2</code> sunt liberi).<br />
+<code>Fr1Fr2</code> intră încă într-un tuplaj, cu <code>Fr3</code> și <code>Gr2</code>, pe clasele <code>10B</code>, <code>10C</code> și <code>10E</code> și se vede pe coloanele orare de mai sus că lecțiile acestui tuplaj cad într-o aceeași oră și nu există suprapuneri de lecții ale membrilor tuplajului.<br />
+Iar lecțiile tuplajului (<code>Fr2 Fr3 Gr1 / 09A 09C 09D</code>) cad și ele într-o aceeași oră, fără suprapuneri cu alte lecții ale profesorilor respectivi.</p>
+<p>Algoritmul de etichetare cu ore descris mai sus se poate adapta și pentru repartizarea echilibrată pe zilele de lucru, a lecțiilor <code>prof|cls</code> specificate în încadrarea săptămânală inițială, a profesorilor (în loc de permutări de ore, folosim permutări de zile); dar desigur, aceasta ar fi sarcina unui alt pachet…</p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js" defer></script>
+</body>
+</html>

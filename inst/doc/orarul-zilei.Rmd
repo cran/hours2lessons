@@ -1,0 +1,85 @@
+---
+title: "Orarul școlar al unei zile"
+author: "Vlad Bazon"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Orarul școlar al unei zile}
+  %\VignetteEngine{knitr::knitr}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(hours2lessons)
+```
+
+## Contextul de lucru
+
+Asumăm existența unui set de date (*data.frame*) cu câte o linie pentru fiecare dintre lecțiile **`prof|cls`** ale unei zile de lucru, cu următoarele proprietăți principale (caracteristice unui *orar școlar*): fiecare profesor apare de cel mult 7 ori (și la o aceeași clasă, de cel mult două ori); fiecare clasă apare de cel puțin 4 ori și cel mult 7 ori (altfel spus, profesorii au câte cel mult 7 ore/zi; clasele au între 4 și 7 ore/zi). Ca *exemplu* este furnizat setul de lecții **LSS**.
+
+În coloana **`prof`** avem *coduri* (în loc de "numele profesorilor") de lungime 3 sau 6, semnificând *disciplina* principală a profesorului (abreviată pe două litere) și un număr de ordine între cei (cel mult 9) încadrați  pe o aceeași disciplină principală; un cod de lungime 6, dacă există, reprezintă un *cuplaj* (sau "profesor *fictiv*"), alipind două coduri de lungime 3: cei doi profesori au de făcut lecția respectivă (într-o aceeași oră) cu câte o grupă de elevi ai clasei `cls`.
+
+```{r}
+str(LSS)  # un exemplu de set de lecții
+LSS %>% dplyr::filter(nchar(prof)==6)  # listează cuplajele existente
+```
+
+Admitem și existența unor *tuplaje*, într-un set suplimentar de date: profesorii din acest set au de intrat în câte o aceeași oră a zilei, la câte o grupă constituită din elevi de la două, trei sau chiar patru clase (sau eventual, la câte una dintre clasele respective); formal, un tuplaj este reprezentat inițial înscriind în `prof` vectorul profesorilor și în `cls` vectorul claselor "tuplate" acestora. Ca *exemplu* este furnizat setul de lecții tuplate **Tuplaje**.
+
+```{r}
+Tuplaje
+```
+
+De observat că dacă numărul de profesori este (cu `1`) mai mare ca al claselor, atunci... avem de înființat *noi* cuplaje (de exemplu, `Fr1Fr2` la clasele `10B` și `11C`, corespunzător tuplajelor din liniile 3 și 4).
+
+**Sarcina pachetului:** avem de adăugat pe setul *tuturor* lecțiilor o coloană **`ora`**, astfel încât profesorii (inclusiv cei fictivi) să nu-și suprapună lecțiile (în câte o aceeași oră) și pe de altă parte, profesorii implicați într-un tuplaj să intre într-o aceeași oră, la clasele din tuplajul respectiv (fără suprapunere cu lecțiile vreunui alt tuplaj și nici cu lecțiile proprii ale membrilor tuplajului respectiv).
+
+## Algoritmul de alocare pe ore a lecțiilor ##
+
+*Parafrazăm* aici, algoritmul folosit în funcția **`mount_hours`**`()` pentru a constitui *un orar* al lecțiilor.
+
+Mai întâi, se investighează setul de tuplaje (dacă există) și dacă este cazul se înființează *noi* cuplaje (egalând în fiecare tuplaj numărul de clase cu cel de profesori); se completează setul principal de lecții (care conține lecțiile profesorilor și cuplajelor inițiale, din afara tuplajelor) cu lecțiile din setul suplimentar al celor tuplate (dacă există un profesor care *cumulează* mai mult de 7 ore, atunci... STOP).
+
+Se împart lecțiile după clasă (constituind o *listă* care asociază fiecărei clase, setul lecțiilor acesteia).
+
+Se parcurge lista claselor, într-o ordine *aleatorie* dar ponderată de coeficienții *betweenness* (în ordine *crescătoare*) rezultați printr-o funcție internă (în care utilizăm două funcții din pachetul **`igraph`**) pe graful claselor după numărul de profesori *comuni* la câte două clase.
+
+Se înființeză un *vector* care asociază fiecărui profesor câte un octet (inițializat cu `0L`) în care urmează să se înregistreze alocările făcute până la momentul curent, lecțiilor profesorului respectiv (un bit `1` în poziția `i=0:6` arată că i s-a alocat deja ora `(i+1)`).
+
+Se etichetează lecțiile clasei *curente* cu o permutare de ore (după numărul de ore/zi ale clasei); dacă astfel, la vreunul dintre profesorii clasei, se constată o suprapunere cu vreo lecție alocată *anterior* (la o clasă întâlnită înaintea celei curente), atunci se încearcă o altă permutare de ore (pentru lecțiile clasei curente). Dacă pentru niciuna dintre permutările încercate, *nu* se poate evita conflictul cu alocările anterioare, atunci... se *abandonează* parcurgerea mai departe a listei claselor, se *reinițializează* vectorul octeților de alocare asociați profesorilor și se *reia* parcurgerea listei claselor, dar într-o altă ordine (aleatoriu, cu "preferințe" date de coeficienții asociați claselor).
+
+Dacă pentru clasa curentă se nimerește o etichetare cu ore convenabilă (fără suprapuneri cu octeții de alocare ai profesorilor clasei, constituiți până la momentul curent), atunci se înregistrează pe biți (în octeții de alocare ai profesorilor clasei) alocarea respectivă și se trece la următoarea clasă.
+
+Corelațiile induse de normele de încadrare a profesorilor (care limitează numărul de ore pe profesor și pe clasă) asigură că la un moment dat (după un număr mai mare sau mai mic de reluări) se va nimeri totuși o ordine de parcurgere a claselor prin care lecțiile *fiecărei* clase sunt etichetate cu ore, fără conflicte; reunind în final orarele claselor, rezultă orarul **`prof|cls|ora`** (în *format lung*) pe ziua respectivă.
+
+Fiind implicate elemente aleatorii, la fiecare nouă execuție a funcției `mount_hours()` se va obține de regulă câte un alt orar. Subliniem că *nu* se are în vedere, numărul de *ferestre* rezultate pe orarele individuale ale profesorilor (fiind sarcina unui alt pachet, să ajusteze orarul încât numărul total de ferestre să fie cât se poate de mic).
+
+Funcția **`long2matrix`**`()` transformă orarul din "formatul lung" într-o matrice în care fiecare linie indică pentru câte un profesor, clasele la care va intra acesta în fiecare oră (iar "`-`" marchează o fereastră sau o oră liberă, din afara orarului individual respectiv).
+
+De *exemplu*, pentru seturile **`LSS`** și **`Tuplaje`** găsim orarul profesorilor angajați în cuplaje sau în tuplaje (cu sublinierea că la o nouă execuție, vom obține un *alt* orar, poate în mai puține încercări, poate mai bun sau poate, mai rău):
+
+```{r}
+mount_hours(LSS, Tuplaje) %>% as.data.frame() %>%
+    dplyr::filter(grepl("Fr|Gr|Ds|Mz", .$prof)) %>% 
+    long2matrix() %>% as.data.frame()
+```
+
+În ora în care profesorul fictiv `Ds1Mz1` intră la clasa `12E`, profesorii `Ds1` și `Mz1` nu au ore proprii (încât pot intra împreună, pe grupe, la `12E`); observăm la fel, pentru cuplajul `Fr1Gr1`.\
+Profesorii `Fr1`, `Fr2` și `Gr1` formau un tuplaj pe clasele `11C` și `11E` și observăm că s-a înființat profesorul fictiv `Fr1Fr2` care intră la `11C` într-o aceeași oră în care `Gr1` intră la `11E` (oră în care `Fr1` și `Fr2` sunt liberi).\
+`Fr1Fr2` intră încă într-un tuplaj, cu `Fr3` și `Gr2`, pe clasele `10B`, `10C` și `10E` și se vede pe coloanele orare de mai sus că lecțiile acestui tuplaj cad într-o aceeași oră și nu există suprapuneri de lecții ale membrilor tuplajului.\
+Iar lecțiile tuplajului (`Fr2 Fr3 Gr1 / 09A 09C 09D`) cad și ele într-o aceeași oră, fără suprapuneri cu alte lecții ale profesorilor respectivi.
+
+Algoritmul de etichetare cu ore descris mai sus se poate adapta și pentru repartizarea echilibrată pe zilele de lucru, a lecțiilor `prof|cls` specificate în încadrarea săptămânală inițială, a profesorilor (în loc de permutări de ore, folosim permutări de zile); dar desigur, aceasta ar fi sarcina unui alt pachet...
+
+
+
+
+
+
