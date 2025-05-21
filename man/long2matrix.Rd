@@ -13,9 +13,13 @@ long2matrix(ORR)
 matricea orară a lecțiilor: clasele alocate pe ore fiecărui profesor
 }
 \description{
-Transformă prof|cls|ora în matricea profesorilor pe orele 1:7
+"Matricea-orar" are liniile numite după profesori, fiecare linie conținând
+clasele la care intră profesorul respectiv, în orele 1:7. Fiecare clasă
+apare câte o singură dată pe fiecare coloană de rang mai mic sau egal cu
+numărul de ore al clasei respective.
 }
 \examples{
-long2matrix(as.data.frame(mount_hours(LSS, Tuplaje))) \%>\% print(quote=FALSE)
-
+\donttest{
+    LM <- long2matrix(as.data.frame(mount_hours(LSS, Tuplaje)))
+}
 }

@@ -15,13 +15,18 @@ Un tuplaj conține 2 sau mai mulți profesori, pe 2 sau mai multe clase
 (numărul de profesori fiind cel mult cu 1 mai mare, ca al claselor)}
 }
 \value{
-Un orar prof|cls|ora pentru ziua respectivă
+Un orar 'prof|cls|ora' pentru ziua respectivă
 }
 \description{
-Adaugă 'ora' încât oricare două lecții prof|cls|ora să nu se suprapună
+Se presupune că lecțiile tuplate sunt înregistrate separat (în 'TPL', nu și
+în 'LSS'), permițând o analiză prealabilă a tuplajelor (dacă tuplajul indică
+de exemplu, 4 profesori pe 3 clase, atunci se va înființa intern un nou
+cuplaj și abia apoi, lecțiile tuplate - inclusiv cuplajele nou înființate -
+vor fi adăugate în 'LSS').
 }
 \examples{
+\donttest{
     STP <- as.data.frame(mount_hours(LSS, Tuplaje)) \%>\% 
            dplyr::arrange(cls, ora)
-
+}
 }

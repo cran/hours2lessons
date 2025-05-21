@@ -5,9 +5,6 @@
 \alias{LSS}
 \title{Exemplu de lecții, cu 62 profesori (între care, două cuplaje) și 32 clase}
 \format{
-set numit "LSS" de 204 lecții prof|cls, care trebuie să se desfășoare
-într-o zi. În ziua respectivă, fiecare profesor are cel mult
-7 lecții; fiecare clasă are cel puțin 4 și cel mult 7 lecții.
 \describe{
 \item{prof}{Cod de 3 sau 6 caractere, reprezentând un profesor,
 respectiv un cuplaj (doi profesori, pe grupe ale unei clase);
@@ -22,6 +19,8 @@ profesorul/cuplajul în ziua respectivă}
 LSS
 }
 \description{
-Exemplu de lecții, cu 62 profesori (între care, două cuplaje) și 32 clase
+set numit "LSS" de 204 lecții prof|cls, care trebuie să se desfășoare
+într-o zi. În ziua respectivă, fiecare profesor are cel mult 7 lecții;
+fiecare clasă are cel puțin 4 și cel mult 7 lecții.
 }
 \keyword{datasets}

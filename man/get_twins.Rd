@@ -15,6 +15,7 @@ pe fiecare membru al unui cuplaj și pe fiecare cuplaj, profesorii
 și cuplajele de care depinde alocarea pe ore a lecțiilor sale.
 }
 \description{
-Depistează cuplajele și dependențele de alocare pe ore, induse de acestea
+Lecțiile cuplajelor trebuie să nu se suprapună (într-o aceeași oră) cu
+lecțiile membrilor acestora.
 }
 \keyword{internal}

@@ -1,4 +1,8 @@
 #' Depistează cuplajele și dependențele de alocare pe ore, induse de acestea
+#'
+#' Lecțiile cuplajelor trebuie să nu se suprapună (într-o aceeași oră) cu
+#' lecțiile membrilor acestora.
+#'
 #' @param LSS data.frame cu lecțiile prof|cls
 #' @return NULL dacă nu există cuplaje; altfel, lista care indică bilateral,
 #'     pe fiecare membru al unui cuplaj și pe fiecare cuplaj, profesorii

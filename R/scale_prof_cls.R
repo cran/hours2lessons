@@ -1,4 +1,9 @@
 #' Scalează profesorii (clasele) după numărul de clase (profesori) în comun
+#'
+#' Clasele vor fi parcurse (pentru a monta ore 1:7 pe lecțiile fiecăreia)
+#' în ordinea crescătoare a coeficienților "betweenness" din graful în care
+#' două clase sunt adiacente după numărul de profesori comuni lor.
+#'
 #' @param LSS data.frame cu lecțiile prof|cls
 #' @return lista de coeficienți betweenness pentru profesori și clase
 #' @keywords internal

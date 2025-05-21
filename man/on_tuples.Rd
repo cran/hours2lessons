@@ -8,20 +8,16 @@ a lecțiilor dintr-un același tuplaj}
 on_tuples(TPL)
 }
 \arguments{
-\item{TPL}{data.frame conținând tuplajele prof|cls
-(separate cu spațiu, pe fiecare câmp, dacă este cazul)}
+\item{TPL}{'data.frame' conținând tuplajele prof|cls
+(separate cu un spațiu, pe fiecare câmp, dacă este cazul)}
 }
 \value{
 NULL dacă setul TPL este defectuos; altfel, o listă conținând
 setul prof|cls|ora ('ora' fiind inițializată cu 0), împreună cu
 doi vectori: profesorii și respectiv clasele, din tuplaje
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{Dacă numărul de profesori este cu 1 mai mare ca al claselor,
-se înființează un cuplaj pentru primii doi din tuplajul respectiv.
-}\if{html}{\out{</div>}}
 }
 \description{
-Adaptează setul tuplajelor în vederea alocării în câte o aceeași oră
-a lecțiilor dintr-un același tuplaj
+Dacă numărul de profesori este cu 1 mai mare ca al claselor, atunci
+se înființează un cuplaj pentru primii doi din tuplajul respectiv.
 }
 \keyword{internal}

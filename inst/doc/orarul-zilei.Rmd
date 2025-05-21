@@ -1,11 +1,9 @@
 ---
 title: "Orarul școlar al unei zile"
-author: "Vlad Bazon"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Orarul școlar al unei zile}
-  %\VignetteEngine{knitr::knitr}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 

@@ -1,13 +1,15 @@
 #' Adaptează setul tuplajelor în vederea alocării în câte o aceeași oră
 #'     a lecțiilor dintr-un același tuplaj
-#' @param TPL data.frame conținând tuplajele prof|cls
-#'     (separate cu spațiu, pe fiecare câmp, dacă este cazul)
+#'
+#' Dacă numărul de profesori este cu 1 mai mare ca al claselor, atunci
+#' se înființează un cuplaj pentru primii doi din tuplajul respectiv.
+#'
+#' @param TPL 'data.frame' conținând tuplajele prof|cls
+#'     (separate cu un spațiu, pe fiecare câmp, dacă este cazul)
 #' @return NULL dacă setul TPL este defectuos; altfel, o listă conținând
 #'     setul prof|cls|ora ('ora' fiind inițializată cu 0), împreună cu
 #'     doi vectori: profesorii și respectiv clasele, din tuplaje
 #'
-#'     Dacă numărul de profesori este cu 1 mai mare ca al claselor,
-#'     se înființează un cuplaj pentru primii doi din tuplajul respectiv.
 #' @keywords internal
 #'
 on_tuples <- function(TPL) {
