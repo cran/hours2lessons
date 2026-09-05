@@ -1,13 +1,13 @@
-4613f186fdff870ef2dbe03dae5e978e *DESCRIPTION
+254eeda03b6df90752771f45d563082e *DESCRIPTION
 ceb321354b5280a988823c1f5eb9c38d *LICENSE
 f1eed329386f788a65f1774b98e402c0 *NAMESPACE
-babcfa6a03c7b84d3af5cf14a7480cbd *NEWS.md
+dcd7a3d39e80b4dca79b67d05078be50 *NEWS.md
 92d8302fd3608619478b9d63c651c8b9 *R/data.R
 3661b6f7e0e32c11f9e8de18356d39d1 *R/get_twins.R
 070c08f5225205235ce44670f29d6e2c *R/hlp.R
 a6447a89908a566039c105afd949ac41 *R/hours2lessons-package.R
 931ac112e6347749497701d42d45a0ef *R/long2matrix.R
-4c0daf6fe6ac92f0c9d32e3fb11e03c8 *R/mount_hours.R
+5ba6be3200ef6a46220015bab37f0c57 *R/mount_hours.R
 8a96c8b7fbab92b8c1f0a126d3fb67dd *R/on_tuples.R
 339933f9bab24a3698627e0708f20855 *R/scale_prof_cls.R
 fd90fa85152fdfb4a08d34b35536f1b0 *R/sysdata.rda
@@ -17,7 +17,7 @@ dfb5a968b59dc985374469c837d010a4 *build/vignette.rds
 1158c7126fa7f0995de681a59a5c989f *data/Tuplaje.rda
 a789592326b77c0f3eb6a0131f0fe046 *inst/doc/orarul-zilei.R
 e3205ba7a4506f6f21ec214d77b75551 *inst/doc/orarul-zilei.Rmd
-8cc5e191d7bbeebe38f981d797bb14c6 *inst/doc/orarul-zilei.html
+18b4c5b32312eceef3c1de0e01a65b6f *inst/doc/orarul-zilei.html
 0b3cb41c86e94e353ecac79ac09988bd *man/LSS.Rd
 c7637082ec7ef8333d173f515551d8c9 *man/Tuplaje.Rd
 fcd41b915ba1f170adb77e512ddbab7d *man/get_twins.Rd

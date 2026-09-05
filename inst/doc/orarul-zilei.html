@@ -468,16 +468,16 @@ bun sau poate, mai rău):</p>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="fu">grepl</span>(<span class="st">&quot;Fr|Gr|Ds|Mz&quot;</span>, .<span class="sc">$</span>prof)) <span class="sc">%&gt;%</span> </span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>    <span class="fu">long2matrix</span>() <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
 <span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt;          1   2   3   4   5   6   7</span></span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; Ds1Mz1 12E   -   -   -   -   -   -</span></span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; Fr1Gr1   -   -   -   -   - 12D   -</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; Ds1Mz1   -   -   -   -   - 12E   -</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; Fr1Gr1   -   -   -   - 12D   -   -</span></span>
 <span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; Gr2    10E 05A   -   -   -   -   -</span></span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; Fr1Fr2 10B   -   - 11C   -   -   -</span></span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; Fr3    10C 09C   -   -   -   -   -</span></span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; Gr1    07C 09D   - 11E 11E   -   -</span></span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; Fr1      - 06C 10B   -   -   -   -</span></span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; Ds1      -   -   - 06B 09E 10E 07A</span></span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; Fr2      - 09A 11C   - 10C   -   -</span></span>
-<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; Mz1      -   - 07D 05C 08B 11E   -</span></span></code></pre></div>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; Fr1Fr2 10B   - 11C   -   -   -   -</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; Fr3    10C   -   - 09C   -   -   -</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; Gr1    07C 11E 11E 09D   -   -   -</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; Fr1      -   -   -   -   - 06C 10B</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; Ds1    07A 09E 06B 10E   -   -   -</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; Fr2      -   -   - 09A 11C 10C   -</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; Mz1    08B 05C 07D 11E   -   -   -</span></span></code></pre></div>
 <p>În ora în care profesorul fictiv <code>Ds1Mz1</code> intră la clasa
 <code>12E</code>, profesorii <code>Ds1</code> și <code>Mz1</code> nu au
 ore proprii (încât pot intra împreună, pe grupe, la <code>12E</code>);

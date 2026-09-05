@@ -41,7 +41,7 @@ mount_hours <- function(LSS, TPL = NULL) {
                         ADF <- rbind(ADF, data.frame(prof = pr, cls = cl))
                     }
             } 
-        } else ADF <- rbind(ADF, data.frame(prof = ZTP, cls = ZTC))
+        } # else ADF <- rbind(ADF, data.frame(prof = ZTP, cls = ZTC))
         if(nrow(ADF) > 1) 
             LSS <- rbind(LSS, ADF[2:nrow(ADF), ])
     }

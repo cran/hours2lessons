@@ -8,6 +8,11 @@
 
 * I decided to give up 'testthat' (I removed 'test-mount\_hours.R', which took a long time); instead, I added the exported function 'verify\_matrix()'.
 
-* I wrapped the examples in '\donttest{}'.
+* I wrapped the examples in 'donttest{}'.
 
 * minor improvements to documentation.
+
+# hours2lessons 0.1.5
+
+* Correction in 'mount_hours()': reduce line 44 to '        } # ' (by commenting the rest of this line).
+ 
