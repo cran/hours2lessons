@@ -7,11 +7,12 @@
 #'
 #' @param ORR data.frame prof|cls|ora (format lung)
 #' @return matricea orară a lecțiilor: clasele alocate pe ore fiecărui profesor
+#'
 #' @export
 #' 
 #' @examples
 #' \donttest{
-#'     LM <- long2matrix(as.data.frame(mount_hours(LSS, Tuplaje)))
+#'     LM <- long2matrix(as.data.frame(mount_hours(dayLessons, dayTuples)))
 #' }
 
 long2matrix <- function(ORR) {
@@ -32,6 +33,7 @@ long2matrix <- function(ORR) {
 #' @param MP Matricea-orar 
 #' @return TRUE dacă fiecare clasă apare cel mult o dată, pe fiecare coloană
 #'     (FALSE în caz contrar)
+#'
 #' @export
 #'
 

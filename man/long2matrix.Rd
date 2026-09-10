@@ -20,6 +20,6 @@ numărul de ore al clasei respective.
 }
 \examples{
 \donttest{
-    LM <- long2matrix(as.data.frame(mount_hours(LSS, Tuplaje)))
+    LM <- long2matrix(as.data.frame(mount_hours(dayLessons, dayTuples)))
 }
 }

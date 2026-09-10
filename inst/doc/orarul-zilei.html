@@ -12,7 +12,7 @@
 
 
 
-<title>Orarul școlar al unei zile</title>
+<title>Orarul zilei într-o școală</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -336,7 +336,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">Orarul școlar al unei zile</h1>
+<h1 class="title toc-ignore">Orarul zilei într-o școală</h1>
 
 
 
@@ -351,25 +351,29 @@ următoarele proprietăți principale (caracteristice unui <em>orar
 clasă, de cel mult două ori); fiecare clasă apare de cel puțin 4 ori și
 cel mult 7 ori (altfel spus, profesorii au câte cel mult 7 ore/zi;
 clasele au între 4 și 7 ore/zi). Ca <em>exemplu</em> este furnizat setul
-de lecții <strong>LSS</strong>.</p>
+de lecții <strong>dayLessons</strong>.</p>
 <p>În coloana <strong><code>prof</code></strong> avem <em>coduri</em>
 (în loc de “numele profesorilor”) de lungime 3 sau 6, semnificând
-<em>disciplina</em> principală a profesorului (abreviată pe două litere)
-și un număr de ordine între cei (cel mult 9) încadrați pe o aceeași
-disciplină principală; un cod de lungime 6, dacă există, reprezintă un
-<em>cuplaj</em> (sau “profesor <em>fictiv</em>”), alipind două coduri de
-lungime 3: cei doi profesori au de făcut lecția respectivă (într-o
-aceeași oră) cu câte o grupă de elevi ai clasei <code>cls</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">str</span>(LSS)  <span class="co"># un exemplu de set de lecții</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; tibble [204 × 2] (S3: tbl_df/tbl/data.frame)</span></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;  $ prof: chr [1:204] &quot;Mt1&quot; &quot;Is3&quot; &quot;Ro9&quot; &quot;En4&quot; ...</span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;  $ cls : chr [1:204] &quot;05A&quot; &quot;05A&quot; &quot;05A&quot; &quot;05A&quot; ...</span></span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>LSS <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="fu">nchar</span>(prof)<span class="sc">==</span><span class="dv">6</span>)  <span class="co"># listează cuplajele existente</span></span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; # A tibble: 2 × 2</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt;   prof   cls  </span></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;  &lt;chr&gt;</span></span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; 1 Ds1Mz1 12E  </span></span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; 2 Fr1Gr1 12D</span></span></code></pre></div>
+<em>disciplina</em> principală a profesorului (abreviată pe două litere,
+sau numai pe una dacă pe disciplina respectivă sunt încadrați mai mult
+de zece profesori) și un număr de ordine între cei încadrați pe o
+aceeași disciplină principală; un cod de lungime 6, dacă există,
+reprezintă un <em>cuplaj</em> (sau “profesor <em>fictiv</em>”), alipind
+două coduri de lungime 3: cei doi profesori au de făcut lecția
+respectivă (într-o aceeași oră) cu câte o grupă de elevi ai clasei
+<code>cls</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">str</span>(dayLessons)  <span class="co"># un exemplu de set de lecții</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; tibble [205 × 2] (S3: tbl_df/tbl/data.frame)</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;  $ prof: chr [1:205] &quot;Mt1&quot; &quot;Is3&quot; &quot;Ro9&quot; &quot;En4&quot; ...</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;  $ cls : chr [1:205] &quot;05A&quot; &quot;05A&quot; &quot;05A&quot; &quot;05A&quot; ...</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>dayLessons <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="fu">nchar</span>(prof)<span class="sc">==</span><span class="dv">6</span>)  <span class="co"># listează cuplajele existente</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 × 2</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt;   prof   cls  </span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;  &lt;chr&gt;</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; 1 Ds1Mz1 12E  </span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; 2 Fr1Gr1 12D  </span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; 3 Fr1Fr3 10B  </span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; 4 Fr1Fr2 11C</span></span></code></pre></div>
 <p>Admitem și existența unor <em>tuplaje</em>, într-un set suplimentar
 de date: profesorii din acest set au de intrat în câte o aceeași oră a
 zilei, la câte o grupă constituită din elevi de la două, trei sau chiar
@@ -377,17 +381,20 @@ patru clase (sau eventual, la câte una dintre clasele respective);
 formal, un tuplaj este reprezentat inițial înscriind în
 <code>prof</code> vectorul profesorilor și în <code>cls</code> vectorul
 claselor “tuplate” acestora. Ca <em>exemplu</em> este furnizat setul de
-lecții tuplate <strong>Tuplaje</strong>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>Tuplaje</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt;              prof         cls</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; 1         Ds1 Mz1     10E 11E</span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; 2     Fr2 Fr3 Gr1 09A 09C 09D</span></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; 3 Fr1 Fr2 Fr3 Gr2 10B 10C 10E</span></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; 4     Fr1 Fr2 Gr1     11C 11E</span></span></code></pre></div>
-<p>De observat că dacă numărul de profesori este (cu <code>1</code>) mai
-mare ca al claselor, atunci… avem de înființat <em>noi</em> cuplaje (de
-exemplu, <code>Fr1Fr2</code> la clasele <code>10B</code> și
-<code>11C</code>, corespunzător tuplajelor din liniile 3 și 4).</p>
+lecții tuplate <strong>dayTuples</strong>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>dayTuples</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt;             prof         cls</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; 1        Ds1 Mz1     10E 11E</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; 2    Fr2 Fr3 Gr1 09A 09C 09D</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; 3 Fr1Fr3 Fr2 Gr2 10B 10C 10E</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; 4     Fr1Fr2 Gr1     11C 11E</span></span></code></pre></div>
+<p>De observat că dacă numărul de profesori este mai mare ca al claselor
+(în linia 3 ar fi 4 profesori, pe 3 clase), atunci… avem de înființat
+<em>noi</em> cuplaje (de exemplu, <code>Fr1Fr3</code> pe clasa
+<code>10B</code>), încât profesorii și clasele din tuplaj să fie în
+relație “one-to-one”; dar utilizatorul este cel care știe care profesori
+ar trebui cuplați, încât lui îi revine sarcina înființării de noi
+cuplaje, dacă este necesar, pentru a introduce tuplajele corecte.</p>
 <p><strong>Sarcina pachetului:</strong> avem de adăugat pe setul
 <em>tuturor</em> lecțiilor o coloană <strong><code>ora</code></strong>,
 astfel încât profesorii (inclusiv cei fictivi) să nu-și suprapună
@@ -401,13 +408,8 @@ nici cu lecțiile proprii ale membrilor tuplajului respectiv).</p>
 <p><em>Parafrazăm</em> aici, algoritmul folosit în funcția
 <strong><code>mount_hours</code></strong><code>()</code> pentru a
 constitui <em>un orar</em> al lecțiilor.</p>
-<p>Mai întâi, se investighează setul de tuplaje (dacă există) și dacă
-este cazul se înființează <em>noi</em> cuplaje (egalând în fiecare
-tuplaj numărul de clase cu cel de profesori); se completează setul
-principal de lecții (care conține lecțiile profesorilor și cuplajelor
-inițiale, din afara tuplajelor) cu lecțiile din setul suplimentar al
-celor tuplate (dacă există un profesor care <em>cumulează</em> mai mult
-de 7 ore, atunci… STOP).</p>
+<p>Mai întâi, se verifică dacă profesorii și clasele au nu mai mult de 7
+ore și dacă tuplajele (când există) sunt definite corect.</p>
 <p>Se împart lecțiile după clasă (constituind o <em>listă</em> care
 asociază fiecărei clase, setul lecțiilor acesteia).</p>
 <p>Se parcurge lista claselor, într-o ordine <em>aleatorie</em> dar
@@ -451,33 +453,35 @@ ziua respectivă.</p>
 funcției <code>mount_hours()</code> se va obține de regulă câte un alt
 orar. Subliniem că <em>nu</em> se are în vedere, numărul de
 <em>ferestre</em> rezultate pe orarele individuale ale profesorilor
-(fiind sarcina unui alt pachet, să ajusteze orarul încât numărul total
-de ferestre să fie cât se poate de mic).</p>
+(fiind sarcina unui alt pachet - v. <strong><em>refitgaps</em></strong>
+- să ajusteze orarul încât numărul total de ferestre să fie cât se poate
+de mic).</p>
 <p>Funcția <strong><code>long2matrix</code></strong><code>()</code>
 transformă orarul din “formatul lung” într-o matrice în care fiecare
 linie indică pentru câte un profesor, clasele la care va intra acesta în
-fiecare oră (iar “<code>-</code>” marchează o fereastră sau o oră
-liberă, din afara orarului individual respectiv).</p>
+fiecare oră (iar “<code>-</code>” marchează o fereastră, sau o oră
+liberă din afara orarului individual respectiv).</p>
 <p>De <em>exemplu</em>, pentru seturile
-<strong><code>LSS</code></strong> și
-<strong><code>Tuplaje</code></strong> găsim orarul profesorilor angajați
-în cuplaje sau în tuplaje (cu sublinierea că la o nouă execuție, vom
-obține un <em>alt</em> orar, poate în mai puține încercări, poate mai
-bun sau poate, mai rău):</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">mount_hours</span>(LSS, Tuplaje) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="fu">grepl</span>(<span class="st">&quot;Fr|Gr|Ds|Mz&quot;</span>, .<span class="sc">$</span>prof)) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>    <span class="fu">long2matrix</span>() <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt;          1   2   3   4   5   6   7</span></span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; Ds1Mz1   -   -   -   -   - 12E   -</span></span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; Fr1Gr1   -   -   -   - 12D   -   -</span></span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; Gr2    10E 05A   -   -   -   -   -</span></span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; Fr1Fr2 10B   - 11C   -   -   -   -</span></span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; Fr3    10C   -   - 09C   -   -   -</span></span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; Gr1    07C 11E 11E 09D   -   -   -</span></span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; Fr1      -   -   -   -   - 06C 10B</span></span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; Ds1    07A 09E 06B 10E   -   -   -</span></span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; Fr2      -   -   - 09A 11C 10C   -</span></span>
-<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; Mz1    08B 05C 07D 11E   -   -   -</span></span></code></pre></div>
+<strong><code>dayLessons</code></strong> și
+<strong><code>dayTuples</code></strong> găsim orarul profesorilor
+angajați în cuplaje sau în tuplaje (cu sublinierea că la o nouă
+execuție, vom obține un <em>alt</em> orar, poate în mai puține
+încercări, poate mai bun sau poate, mai rău):</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">mount_hours</span>(dayLessons, dayTuples) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="fu">grepl</span>(<span class="st">&quot;Fr|Gr|Ds|Mz&quot;</span>, .<span class="sc">$</span>prof)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>    <span class="fu">long2matrix</span>() <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt;          1   2   3   4   5   6</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; Ds1Mz1   -   - 12E   -   -   -</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; Fr1      -   - 06C   -   -   -</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; Fr1Gr1   -   -   - 12D   -   -</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; Fr3      -   - 09C   -   -   -</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; Fr1Fr3 10B   -   -   -   -   -</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; Fr1Fr2   - 11C   -   -   -   -</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; Fr2    10C   - 09A   -   -   -</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; Gr2    10E   - 05A   -   -   -</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; Gr1      - 11E 09D   - 07C   -</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt; Ds1      - 07A   - 06B 10E 09E</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; Mz1      - 08B   - 05C 11E 07D</span></span></code></pre></div>
 <p>În ora în care profesorul fictiv <code>Ds1Mz1</code> intră la clasa
 <code>12E</code>, profesorii <code>Ds1</code> și <code>Mz1</code> nu au
 ore proprii (încât pot intra împreună, pe grupe, la <code>12E</code>);
@@ -486,21 +490,24 @@ Profesorii <code>Fr1</code>, <code>Fr2</code> și <code>Gr1</code> formau
 un tuplaj pe clasele <code>11C</code> și <code>11E</code> și observăm că
 s-a înființat profesorul fictiv <code>Fr1Fr2</code> care intră la
 <code>11C</code> într-o aceeași oră în care <code>Gr1</code> intră la
-<code>11E</code> (oră în care <code>Fr1</code> și <code>Fr2</code> sunt
-liberi).<br />
-<code>Fr1Fr2</code> intră încă într-un tuplaj, cu <code>Fr3</code> și
-<code>Gr2</code>, pe clasele <code>10B</code>, <code>10C</code> și
-<code>10E</code> și se vede pe coloanele orare de mai sus că lecțiile
+<code>11E</code> (oră în care <code>Fr1</code> și <code>Fr2</code> nu au
+de făcut alte lecții).<br />
+<code>Fr1</code> și <code>Fr2</code> intră încă într-un tuplaj, cu
+<code>Fr3</code> și <code>Gr2</code>, pe clasele <code>10B</code>,
+<code>10C</code> și <code>10E</code>; utilizatorul care va fi definit
+tuplajele corecte, a înființat cuplajul <code>Fr1Fr3</code> pe clasa
+<code>10B</code>; se vede pe coloanele orare de mai sus că lecțiile
 acestui tuplaj cad într-o aceeași oră și nu există suprapuneri de lecții
 ale membrilor tuplajului.<br />
 Iar lecțiile tuplajului (<code>Fr2 Fr3 Gr1 / 09A 09C 09D</code>) cad și
 ele într-o aceeași oră, fără suprapuneri cu alte lecții ale profesorilor
 respectivi.</p>
 <p>Algoritmul de etichetare cu ore descris mai sus se poate adapta și
-pentru repartizarea echilibrată pe zilele de lucru, a lecțiilor
+pentru repartizarea <em>echilibrată</em> pe zilele de lucru, a lecțiilor
 <code>prof|cls</code> specificate în încadrarea săptămânală inițială, a
 profesorilor (în loc de permutări de ore, folosim permutări de zile);
-dar desigur, aceasta ar fi sarcina unui alt pachet…</p>
+dar desigur, aceasta ar fi sarcina unui alt pachet (v.
+<strong><em>days2lessons</em></strong>).</p>
 </div>
 
 

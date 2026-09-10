@@ -1,4 +1,6 @@
-# Numărul de biți '0' aflați între biți '1' ("ferestre")
+# Numărul de biți '0' aflați între biți '1' ("ferestre" în orarul profesorului)
+# Vectorul "h2bin" conține șabloanele binare 2^(h-1) ale orelor h=1:7
+
 cnt_holes <- function(sb) { # sb: șablonul binar al orelor profesorului
     bits <- which(bitwAnd(sb, h2bin) > 0) # rangurile biților '1'
     n <- length(bits)

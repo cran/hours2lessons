@@ -4,19 +4,25 @@ export("%>%")
 export(long2matrix)
 export(mount_hours)
 export(verify_matrix)
-importFrom(dplyr,"%>%")
-importFrom(dplyr,all_of)
-importFrom(dplyr,distinct)
-importFrom(dplyr,filter)
-importFrom(dplyr,mutate)
-importFrom(dplyr,pull)
-importFrom(dplyr,select)
-importFrom(igraph,betweenness)
-importFrom(igraph,graph_from_adjacency_matrix)
+importFrom(dplyr,
+  "%>%",
+  all_of,
+  distinct,
+  filter,
+  mutate,
+  pull,
+  select
+)
+importFrom(igraph,
+  betweenness,
+  graph_from_adjacency_matrix
+)
 importFrom(magrittr,"%>%")
-importFrom(purrr,map)
-importFrom(purrr,map_df)
-importFrom(purrr,map_dfr)
+importFrom(purrr,
+  map,
+  map_df,
+  map_dfr
+)
 importFrom(rlang,.data)
 importFrom(stats,setNames)
 importFrom(tidyr,pivot_wider)

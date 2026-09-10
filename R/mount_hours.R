@@ -1,67 +1,56 @@
-#' Adaugă 'ora' încât oricare două lecții prof|cls|ora să nu se suprapună
-#'
-#' Se presupune că lecțiile tuplate sunt înregistrate separat (în 'TPL', nu și
-#' în 'LSS'), permițând o analiză prealabilă a tuplajelor (dacă tuplajul indică
-#' de exemplu, 4 profesori pe 3 clase, atunci se va înființa intern un nou
-#' cuplaj și abia apoi, lecțiile tuplate - inclusiv cuplajele nou înființate -  
-#' vor fi adăugate în 'LSS').
+#' Adaugă 'ora' încât oricare două lecții prof|cls|ora să nu se suprapună,
+#' iar lecțiile dintr-un același tuplaj să cadă într-o aceeași oră 1:7
 #'
 #' @param LSS data.frame cu lecțiile prof|cls, unde 'prof' este un 
 #'     profesor propriu-zis, sau unul fictiv (cuplaj de doi/clasă)
 #' @param TPL data.frame pentru tuplaje, dacă este cazul
 #'     Un tuplaj conține 2 sau mai mulți profesori, pe 2 sau mai multe clase
-#'     (numărul de profesori fiind cel mult cu 1 mai mare, ca al claselor)
+#'     (numărul de profesori fiind egal cu al claselor)
 #' @return Un orar 'prof|cls|ora' pentru ziua respectivă
+#'
+#' @details 
+#' 'PERM' is a list of permutations for 4:7 elements.
+#' 'h2bin' is a vector of integers 2^(h-1) for the hours h=1:7.
+#' 'cnt_holes()' gives the current number of gaps in an individual schedule.
+#'
 #' @export
 #'
 #' @examples
 #' \donttest{
-#'     STP <- as.data.frame(mount_hours(LSS, Tuplaje)) %>% 
+#'     STP <- as.data.frame(mount_hours(dayLessons, dayTuples)) %>% 
 #'            dplyr::arrange(cls, ora)
 #' }
 
 mount_hours <- function(LSS, TPL = NULL) {
-    P23 <- ZTP <- ZTC <- NULL
-    # Dacă s-a furnizat și un set TPL de tuplaje, atunci verifică
-    # dacă 'on_tuples(TPL)' a înființat vreun cuplaj; dacă da, atunci
-    # adaugă lecțiile acestuia în LSS
-    if(!is.null(TPL)) {
-        lTP <- on_tuples(TPL)
-        P23 <- lTP[[1]]  # tuplajele, în care  eventual, s-au înființat cuplaje
-        ZTP <- lTP[[2]]  # profesorii (inclusiv, noile cuplaje) din TPL
-        ZTC <- lTP[[3]]  # clasele implicate în TPL
-        it <- which(nchar(ZTP) == 6)  # noul cuplaj trebuie adăugat în 'LSS'
-        ADF <- data.frame(prof="", cls="")
-        if(length(it) > 0) {
-            for(PP in ZTP[it]) {
-                    DT <- P23 %>% filter(grepl(PP, .data$prof))
-                    for(i in 1:nrow(DT)) {
-                        pr <- strsplit(DT[i, 1], " ")[[1]]
-                        cl <- strsplit(DT[i, 2], " ")[[1]]
-                        ADF <- rbind(ADF, data.frame(prof = pr, cls = cl))
-                    }
-            } 
-        } # else ADF <- rbind(ADF, data.frame(prof = ZTP, cls = ZTC))
-        if(nrow(ADF) > 1) 
-            LSS <- rbind(LSS, ADF[2:nrow(ADF), ])
-    }
     # STOP dacă un profesor sau o clasă cumulează mai mult de 7 ore
-    # (probabil, lecțiile din 'TPL' fuseseră înregistrate și în 'LSS'!)
     stopifnot("you have a Teacher (prof) with more than 7 hours" = 
               all(table(LSS$prof) <= 7))
     stopifnot("you have a Class (cls) with more than 7 hours" = 
               all(table(LSS$cls) <= 7))
 
-    # LSS conține acum și cuplajele nou înființate; get_twins(LSS) ne dă
-    # vectorii care indică de care profesor/cuplaj depinde alocarea pe ore
-    # a lecțiilor cuplajelor și profesorilor angajați în cuplaje
-    tw <- get_twins(LSS)
-    Twinz <- NULL  # poate că în 'LSS' indicat NU există cuplaje
-    if(! is.null(tw)) {
+    P23 <- ZTP <- ZTC <- NULL
+    # Dacă s-a furnizat și un set TPL de tuplaje, reținem profesorii și
+    # clasele din tuplaje și adăugăm în TPL un câmp 'ora' inițializat cu 0.
+    if(!is.null(TPL)) {
+        ZTP <- TPL %>% pull(.data$prof) %>% 
+               lapply(., strsplit, " ") %>% unlist() %>% unique()
+        ZTC <- TPL %>% pull(.data$cls) %>% 
+               lapply(., strsplit, " ") %>% unlist() %>% unique()
+        stopifnot("a tuple must have the same number of teachers as classes" =
+                  length(ZTP) == length(ZTC))
+        P23 <- TPL %>% mutate(ora = 0L)
+    }
+
+    Twinz <- NULL  # Poate că în 'LSS' indicat NU există cuplaje.
+    # Dacă există cuplaje, stabilește pentru fiecare cuplaj și pentru fiecare
+    # membru al vreunui cuplaj, de care profesori sau cuplaje depinde alocarea
+    # pe ore a lecțiilor sale (încât să nu apară suprapuneri).
+    tw <- get_twins(LSS) 
+    if(! is.null(tw)) { 
         TW1 <- tw[[1]]; TW2 <- tw[[2]]
         Twinz <- union(names(TW1), names(TW2))  # toți care țin de cuplaje
     }
-
+    
     # Alocarea pe ore a lecțiilor din LSS (ținând seama și de TPL) va 
     # decurge pe clase, într-o ordine a claselor aleatorie, dar ponderată
     # de coeficienții returnați de 'scale_prof_cls(LSS)'
@@ -79,7 +68,8 @@ mount_hours <- function(LSS, TPL = NULL) {
     }
     # Actualizează câmpul 'ora' din setul curent al tuplajelor 
     set_h_tuplaj <- function(Q, P, h) {
-        if(h %in% z23[which(grepl(Q, z23[,2])), 3]) return(FALSE)
+        if(h %in% z23[which(grepl(Q, z23[,2])), 3]) 
+            return(FALSE)
         z23[which(grepl(Q, z23[,2]) & grepl(P, z23[,1])), 3] <<- h
         TRUE
     }
@@ -148,7 +138,7 @@ mount_hours <- function(LSS, TPL = NULL) {
                         bis[jn] <- bis[jn+1] <- bis[jn] + bis[jn+1]
             blks <- bitwOr(bhp, bis)   # biţii vechilor şi noii alocări
 
-            # NEWS: cel mult 2 ferestre, pe linie
+            # cel mult 2 ferestre, pe linie
             Cond1 <- unlist(lapply(blks, cnt_holes))
             if(any(Cond1 > 2)) next  # controlează numărul de ferestre
 
@@ -166,13 +156,13 @@ mount_hours <- function(LSS, TPL = NULL) {
         succ <- TRUE
         bith <- hBits  # reiniţializează vectorul alocărilor
         lstCls <- sample(lstCls, prob = BTW$cls)  # ordine aleatorie ponderată 
-        z23 <- P23  # tuplajele rezultate la început, din on_tuples(LSS)
-        for(K in lstCls) {  ##  cat("*")  # ecou pe ecran (la clasa curentă)
+        z23 <- P23  # tuplajele, cu 'ora' inițializată cu 0 
+        for(K in lstCls) { # cat("*")  # ecou pe ecran (la clasa curentă)
             if(K %in% ZTC)  # clasă implicată în tuplaje;
                 pth <- ph_in_tuplaj(K)  # alocarea actuală a lecțiilor acesteia
             else {pth <- NULL}
             W <- mountHtoCls(Z[[K]])  # încearcă un orar pentru clasa curentă
-            if(is.null(W)) {  ## cat(" / ")  # eșuează la clasa curentă
+            if(is.null(W)) { # cat(" / ")  # eșuează la clasa curentă
                 # inr <- inr + 1 
                 succ <- FALSE 
                 break  # ...ceea ce va abandona 'for', reluând 'while'

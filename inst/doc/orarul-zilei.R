@@ -8,14 +8,14 @@ knitr::opts_chunk$set(
 library(hours2lessons)
 
 ## -----------------------------------------------------------------------------
-str(LSS)  # un exemplu de set de lecții
-LSS %>% dplyr::filter(nchar(prof)==6)  # listează cuplajele existente
+str(dayLessons)  # un exemplu de set de lecții
+dayLessons %>% dplyr::filter(nchar(prof)==6)  # listează cuplajele existente
 
 ## -----------------------------------------------------------------------------
-Tuplaje
+dayTuples
 
 ## -----------------------------------------------------------------------------
-mount_hours(LSS, Tuplaje) %>% as.data.frame() %>%
+mount_hours(dayLessons, dayTuples) %>% as.data.frame() %>%
     dplyr::filter(grepl("Fr|Gr|Ds|Mz", .$prof)) %>% 
     long2matrix() %>% as.data.frame()
 

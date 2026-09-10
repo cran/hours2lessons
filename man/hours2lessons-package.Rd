@@ -11,5 +11,10 @@ Lecțiile prof/cls trebuie completate cu un câmp "ora", astfel ca oricare două
 \author{
 \strong{Maintainer}: Vlad Bazon \email{vlad.bazon@gmail.com}
 
+Authors:
+\itemize{
+  \item Vlad Bazon \email{vlad.bazon@gmail.com}
+}
+
 }
 \keyword{internal}

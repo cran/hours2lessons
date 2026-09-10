@@ -2,7 +2,8 @@
 % Please edit documentation in R/mount_hours.R
 \name{mount_hours}
 \alias{mount_hours}
-\title{Adaugă 'ora' încât oricare două lecții prof|cls|ora să nu se suprapună}
+\title{Adaugă 'ora' încât oricare două lecții prof|cls|ora să nu se suprapună,
+iar lecțiile dintr-un același tuplaj să cadă într-o aceeași oră 1:7}
 \usage{
 mount_hours(LSS, TPL = NULL)
 }
@@ -12,21 +13,23 @@ profesor propriu-zis, sau unul fictiv (cuplaj de doi/clasă)}
 
 \item{TPL}{data.frame pentru tuplaje, dacă este cazul
 Un tuplaj conține 2 sau mai mulți profesori, pe 2 sau mai multe clase
-(numărul de profesori fiind cel mult cu 1 mai mare, ca al claselor)}
+(numărul de profesori fiind egal cu al claselor)}
 }
 \value{
 Un orar 'prof|cls|ora' pentru ziua respectivă
 }
 \description{
-Se presupune că lecțiile tuplate sunt înregistrate separat (în 'TPL', nu și
-în 'LSS'), permițând o analiză prealabilă a tuplajelor (dacă tuplajul indică
-de exemplu, 4 profesori pe 3 clase, atunci se va înființa intern un nou
-cuplaj și abia apoi, lecțiile tuplate - inclusiv cuplajele nou înființate -
-vor fi adăugate în 'LSS').
+Adaugă 'ora' încât oricare două lecții prof|cls|ora să nu se suprapună,
+iar lecțiile dintr-un același tuplaj să cadă într-o aceeași oră 1:7
+}
+\details{
+'PERM' is a list of permutations for 4:7 elements.
+'h2bin' is a vector of integers 2^(h-1) for the hours h=1:7.
+'cnt_holes()' gives the current number of gaps in an individual schedule.
 }
 \examples{
 \donttest{
-    STP <- as.data.frame(mount_hours(LSS, Tuplaje)) \%>\% 
+    STP <- as.data.frame(mount_hours(dayLessons, dayTuples)) \%>\% 
            dplyr::arrange(cls, ora)
 }
 }

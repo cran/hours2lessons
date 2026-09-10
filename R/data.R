@@ -1,8 +1,10 @@
-#' Exemplu de lecții, cu 62 profesori (între care, două cuplaje) și 32 clase
+#' Exemplu de lecții, cu 64 profesori (între care, patru cuplaje dintre care două fac parte din tuplaje) și 34 clase
 #'
-#' set numit "LSS" de 204 lecții prof|cls, care trebuie să se desfășoare 
-#' într-o zi. În ziua respectivă, fiecare profesor are cel mult 7 lecții;
-#' fiecare clasă are cel puțin 4 și cel mult 7 lecții.
+#' set de 205 lecții prof|cls, care trebuie să se desfășoare 
+#' în orele 1:7 ale unei zile. Fiecare profesor are cel puțin una și
+#' cel mult 7 ore (lecții); fiecare clasă are cel puțin 5 și cel mult 7 ore.
+#' Unele lecții (indicate în setul "dayTuples") trebuie să cadă într-o aceeași
+#' oră a zilei.
 #'
 #' @format
 #' \describe{
@@ -14,19 +16,23 @@
 #'     \item{cls}{Clasa (două sau trei caractere) la care va intra 
 #'                profesorul/cuplajul în ziua respectivă} 
 #' }
-"LSS"
+"dayLessons"
 #'
 #' Exemplu de tuplaje
 #'
-#' set numit "Tuplaje", conținând 4 tuplaje asociate setului "LSS". Un tuplaj 
-#' va angaja într-o aceeași oră, mai mulți profesori și mai multe clase.
-#' Lecțiile tuplate NU sunt înregistrate în "LSS".
+#' set de 4 tuplaje asociate setului "LSS". Un tuplaj
+#' va angaja într-o aceeași oră, mai mulți profesori și mai multe clase, dar
+#' un tuplaj corect trebuie să aibă același număr de profesori ca și de clase.
+#' Dacă numărul de profesori este totuși mai mare decât al claselor din tuplaj,
+#' utilizatorul va ști cel mai bine care dintre profesorii respectiv trebuie
+#' cuplați, încât tuplajul să devină corect.
 #'
 #' @format
 #' \describe{
-#'     \item{prof}{Profesorii care trebuie să intre într-o aceeași oră a zilei
-#'         la câte una dintre clasele respective (separați printr-un spațiu).}
+#'     \item{prof}{Profesorii (eventual, cuplați doi pe o aceeași clasă) care
+#' trebuie să intre într-o aceeași oră a zilei la câte una dintre clasele
+#' respective (separați printr-un spațiu).}
 #'     \item{cls}{Clasele care trebuie tuplate (separate printr-un spațiu).}
 #'}
-"Tuplaje"
+"dayTuples"
 
